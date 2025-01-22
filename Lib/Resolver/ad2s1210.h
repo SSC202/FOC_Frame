@@ -89,6 +89,7 @@ extern "C" {
 #define Software_SPI 0 // 软件SPI
 
 #include "stm32h7xx.h"
+#include "my_math.h"
 #if(Hardware_SPI == 1)
 #include "spi.h"
 #endif
@@ -132,15 +133,16 @@ extern "C" {
 
 typedef struct
 {
-    int32_t Mechanical_Angle;
-    int16_t Electrical_Angle;
+    float Mechanical_Angle;
+    float Electrical_Angle;
+    float Electrical_Angle_offset;
     uint16_t Angle;
     uint8_t fluat_data;
     uint8_t Register_data;
     float Speed;
-    int16_t Current_Angle;
-    int16_t Last_Angle;
-    int32_t angle_diff;
+    float Current_Angle;
+    float Last_Angle;
+    float angle_diff;
     float Current_Speed;
 } AD2S1210_P;
 

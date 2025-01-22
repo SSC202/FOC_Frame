@@ -61,6 +61,10 @@ void Error_Handler(void);
 #define AD2S1_SAM_GPIO_Port GPIOA
 #define AD2S1_RESET_Pin GPIO_PIN_3
 #define AD2S1_RESET_GPIO_Port GPIOA
+#define M1_V_Pin GPIO_PIN_4
+#define M1_V_GPIO_Port GPIOC
+#define M1_U_Pin GPIO_PIN_5
+#define M1_U_GPIO_Port GPIOC
 #define AD2S1_RD_Pin GPIO_PIN_2
 #define AD2S1_RD_GPIO_Port GPIOB
 #define AD2S1_PCS_Pin GPIO_PIN_11

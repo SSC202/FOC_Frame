@@ -25,6 +25,9 @@ foc_project/usermain.o: ..\Usercode\usermain.c ..\Usercode\usermain.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_mdma.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_exti.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_cortex.h \
+  ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_adc.h \
+  ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_ll_adc.h \
+  ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_adc_ex.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_flash.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_flash_ex.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_hsem.h \
@@ -39,6 +42,8 @@ foc_project/usermain.o: ..\Usercode\usermain.c ..\Usercode\usermain.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_uart.h \
   ..\Drivers\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_uart_ex.h \
   ..\Core\Inc\tim.h ..\Core\Inc\main.h ..\Core\Inc\spi.h \
-  ..\Core\Inc\usart.h D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
-  ..\FOC\tf.h ..\FOC\my_math.h ..\FOC\svpwm.h ..\FOC\tf.h \
-  ..\Lib\ad2s1210.h
+  ..\Core\Inc\adc.h ..\Core\Inc\usart.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  ..\FOC\coordinate_transform.h ..\FOC\my_math.h ..\FOC\svpwm.h \
+  ..\Usercode\usermain.h ..\FOC\curr_sample.h ..\Lib\Resolver\ad2s1210.h \
+  ..\FOC\my_math.h

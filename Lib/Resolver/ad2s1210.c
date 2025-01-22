@@ -117,16 +117,17 @@ void AD2S1210_ModeSelect(AD2S1210_CONTROL_MOD_ENUM mode)
  */
 void AD2S1210_para_Iint(void)
 {
-    AD2S.Mechanical_Angle = 0;
-    AD2S.Electrical_Angle = 0;
-    AD2S.Angle            = 0;
-    AD2S.fluat_data       = 0;
-    AD2S.Register_data    = 0;
-    AD2S.Speed            = 0;
-    AD2S.Current_Angle    = 0;
-    AD2S.Last_Angle       = 0;
-    AD2S.angle_diff       = 0;
-    AD2S.Current_Speed    = 0;
+    AD2S.Mechanical_Angle        = 0;
+    AD2S.Electrical_Angle        = 0;
+    AD2S.Electrical_Angle_offset = -1.4f;
+    AD2S.Angle                   = 0;
+    AD2S.fluat_data              = 0;
+    AD2S.Register_data           = 0;
+    AD2S.Speed                   = 0;
+    AD2S.Current_Angle           = 0;
+    AD2S.Last_Angle              = 0;
+    AD2S.angle_diff              = 0;
+    AD2S.Current_Speed           = 0;
 }
 
 /**
@@ -294,8 +295,8 @@ void AD2S1210_Init(void)
  */
 void AD2S1210_Angle_Get(void)
 {
-    AD2S.Mechanical_Angle = (AD2S1210_ReadPosition(ONE) - 32767);
-    AD2S.Electrical_Angle = AD2S.Mechanical_Angle * 4 - 22828;
+    AD2S.Mechanical_Angle = (AD2S1210_ReadPosition(ONE) - 32767) * M_PI / 32767.f;
+    AD2S.Electrical_Angle = normalize(-4, AD2S.Mechanical_Angle, AD2S.Electrical_Angle_offset);
 }
 
 /**
@@ -303,16 +304,16 @@ void AD2S1210_Angle_Get(void)
  */
 void AD2S1210_Speed_Get(void)
 {
-    AD2S.Current_Angle = AD2S.Mechanical_Angle;
+    AD2S.Current_Angle = AD2S.Electrical_Angle;
     AD2S.angle_diff    = (AD2S.Current_Angle - AD2S.Last_Angle);
-    if (AD2S.angle_diff > 40000) {
-        AD2S.angle_diff = AD2S.angle_diff - 65536;
-    } else if (AD2S.angle_diff < -40000) {
-        AD2S.angle_diff = AD2S.angle_diff + 65536;
+    if (AD2S.angle_diff > M_PI) {
+        AD2S.angle_diff = AD2S.angle_diff - 2 * M_PI;
+    } else if (AD2S.angle_diff < -M_PI) {
+        AD2S.angle_diff = AD2S.angle_diff + 2 * M_PI;
     } else {
         AD2S.angle_diff = AD2S.angle_diff;
     }
 
-    AD2S.Speed      = AD2S.angle_diff * 0.9155273438f;
+    AD2S.Speed      = AD2S.angle_diff / T_SAMPLE;
     AD2S.Last_Angle = AD2S.Current_Angle;
 }
