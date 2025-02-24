@@ -13,7 +13,7 @@ float load_speed_ref;
 uint8_t system_enable = 0; // 系统使能参数
 
 /**
- * @brief   串口重定向
+ * @brief   UART print to screen
  */
 int fputc(int ch, FILE *f)
 {
@@ -22,7 +22,7 @@ int fputc(int ch, FILE *f)
 }
 
 /**
- * @brief   外设及配置初始化
+ * @brief   Init Program
  */
 static void init(void)
 {
@@ -85,32 +85,32 @@ void usermain(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM8) {
-        // 角度和速度采样
-        AD2S1210_Angle_Get();
-        AD2S1210_Speed_Get();
+        // // 角度和速度采样
+        // AD2S1210_Angle_Get();
+        // AD2S1210_Speed_Get();
 
-        // 采样电流变换为 dq 轴电流
-        abc_2_dq(&Load_idq, &Load_iabc, AD2S.Electrical_Angle);
+        // // 采样电流变换为 dq 轴电流
+        // abc_2_dq(&Load_idq, &Load_iabc, AD2S.Electrical_Angle);
 
-        // 速度 PI 控制器计算
-        Load_speed_pi.ref = load_speed_ref;
-        Load_speed_pi.fdb = AD2S.Speed;
-        PID_Calc(&Load_speed_pi);
+        // // 速度 PI 控制器计算
+        // Load_speed_pi.ref = load_speed_ref;
+        // Load_speed_pi.fdb = AD2S.Speed;
+        // PID_Calc(&Load_speed_pi);
 
-        // 电流 PI 控制器计算(id = 0)
-        Load_id_pi.ref = 0;
-        Load_id_pi.fdb = Load_idq.d;
-        PID_Calc(&Load_id_pi);
-        u_dq.d = Load_id_pi.output;
+        // // 电流 PI 控制器计算(id = 0)
+        // Load_id_pi.ref = 0;
+        // Load_id_pi.fdb = Load_idq.d;
+        // PID_Calc(&Load_id_pi);
+        // u_dq.d = Load_id_pi.output;
 
-        Load_iq_pi.ref = Load_speed_pi.output;
-        Load_iq_pi.fdb = Load_idq.q;
-        PID_Calc(&Load_iq_pi);
-        u_dq.q = Load_iq_pi.output;
+        // Load_iq_pi.ref = Load_speed_pi.output;
+        // Load_iq_pi.fdb = Load_idq.q;
+        // PID_Calc(&Load_iq_pi);
+        // u_dq.q = Load_iq_pi.output;
 
-        // SVPWM
-        dq_2_abc(&u_abc, &u_dq, AD2S.Electrical_Angle);
-        e_svpwm(&u_abc, 101, &duty_abc);
+        // // SVPWM
+        // dq_2_abc(&u_abc, &u_dq, AD2S.Electrical_Angle);
+        // e_svpwm(&u_abc, 101, &duty_abc);
 
         // Inverter
         if (system_enable == 0) {
@@ -163,4 +163,30 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
             }
         }
     }
+    // 角度和速度采样
+    AD2S1210_Angle_Get();
+    AD2S1210_Speed_Get();
+
+    // 采样电流变换为 dq 轴电流
+    abc_2_dq(&Load_idq, &Load_iabc, AD2S.Electrical_Angle);
+
+    // 速度 PI 控制器计算
+    Load_speed_pi.ref = load_speed_ref;
+    Load_speed_pi.fdb = AD2S.Speed;
+    PID_Calc(&Load_speed_pi);
+
+    // 电流 PI 控制器计算(id = 0)
+    Load_id_pi.ref = 0;
+    Load_id_pi.fdb = Load_idq.d;
+    PID_Calc(&Load_id_pi);
+    u_dq.d = Load_id_pi.output;
+
+    Load_iq_pi.ref = Load_speed_pi.output;
+    Load_iq_pi.fdb = Load_idq.q;
+    PID_Calc(&Load_iq_pi);
+    u_dq.q = Load_iq_pi.output;
+
+    // SVPWM
+    dq_2_abc(&u_abc, &u_dq, AD2S.Electrical_Angle);
+    e_svpwm(&u_abc, 101, &duty_abc);
 }
